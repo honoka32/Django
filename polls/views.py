@@ -2,7 +2,8 @@
 from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import timezone
+from django.utils import timezone
+from django.urls import reverse
 from django.views import generic
 
 from .models import Choice, Question
@@ -23,7 +24,8 @@ class IndexView(generic.ListView):
 
 
 class DetailView(generic.DetailView):
-    ...
+    model = Question
+    template_name = "polls/detail.html"
 
     def get_queryset(self):
         """
@@ -38,8 +40,6 @@ class ResultsView(generic.DetailView):
 
 
 def vote(request, question_id):
-    # same as above, no changes needed.
-    ...
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
